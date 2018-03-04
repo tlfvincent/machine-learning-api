@@ -1,5 +1,6 @@
 import socket
 import pickle
+import traceback
 import pandas as pd
 from flask import Flask, request, jsonify
 
@@ -28,7 +29,10 @@ def index():
     """
     When you request the root path, you'll get the index.html template.
     """
-    return "Hello World! My Hostname is: {0}".format(socket.gethostname())
+    try:
+        return "Hello World! My Hostname is: {0}".format(socket.gethostname())
+    except Exception as e:
+        return jsonify({'error': str(e), 'trace': traceback.format_exc()})
 
 
 @iris_service.route("/predict", methods=['POST'])
@@ -40,23 +44,21 @@ def get_predictions():
     :returns data:
         A JSON string of ``ndata`` data points.
     """
-    #return "Hello World! My Hostname is: {0}".format(socket.gethostname())
-    json_ = request.json
-    query = pd.get_dummies(pd.DataFrame.from_records([json_]))
-    query = query.reindex(columns=iris_service.features, fill_value=0)
+    try:
+        json_ = request.json
+        query = pd.get_dummies(pd.DataFrame.from_records([json_]))
+        query = query.reindex(columns=iris_service.features, fill_value=0)
 
-    probas_ = iris_service.classifier.predict_proba(query)
-    predictions = {'Iris-setosa': probas_[0][0],
-                   'Iris-versicolor': probas_[0][1],
-                   'Iris-virginica': probas_[0][2]}
+        probas_ = iris_service.classifier.predict_proba(query)
+        predictions = {'Iris-setosa': probas_[0][0],
+                       'Iris-versicolor': probas_[0][1],
+                       'Iris-virginica': probas_[0][2]}
 
-    response = jsonify({'prediction': predictions, "status_code": 200})
-    return response
+        response = jsonify({'prediction': predictions, "status_code": 200})
+        return response
+    except Exception as e:
+        return jsonify({'error': str(e), 'trace': traceback.format_exc()})
 
-
-
-    # response = jsonify({'prediction': predictions, "status_code": 200})
-    # return response
 
 if __name__ == "__main__":
     iris_service.run(host='0.0.0.0', port=5010, debug=True)
