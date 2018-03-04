@@ -10,7 +10,7 @@ from sklearn.neighbors import KNeighborsClassifier
 
 def main(params):
 
-    train = params.evaluate
+    train = params.train
     evaluate = params.evaluate
 
     dat = pd.read_csv('./data/iris_data.csv')
