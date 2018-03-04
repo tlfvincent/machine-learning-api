@@ -16,7 +16,7 @@ from sklearn.naive_bayes import BernoulliNB
 from sklearn.neighbors import KNeighborsClassifier
 
 
-class ModelSearch(object):
+class EvaluateModel(object):
     def __init__(self, X, y):
         self.X = X
         self.y = y
@@ -79,27 +79,14 @@ class ModelSearch(object):
         #roc_auc = auc(fpr, tpr)
         return 1-acc
 
-
-def main():
-
-    dat = pd.read_csv('./data/iris_data.csv')
-
-    X = dat[[x for x in dat.columns if x != 'class']]
-
-    y = dat['class']
-
-    search = ModelSearch(X, y)
-
-    trials = Trials()
-    objective = search.objective_function
-    model_space = search.define_model_space()
-    best = fmin(objective,
-                model_space,
-                algo=tpe.suggest,
-                max_evals=100,
-                trials=trials)
-
-    print(best)
-
-if __name__ == '__main__':
-    main()
+    def run_trials(self, evals=100):
+        trials = Trials()
+        objective = self.objective_function
+        model_space = self.define_model_space()
+        best = fmin(objective,
+                    model_space,
+                    algo=tpe.suggest,
+                    max_evals=100,
+                    trials=trials)
+        print(best)
+        return trials

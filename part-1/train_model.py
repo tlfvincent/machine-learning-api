@@ -47,17 +47,17 @@ class TrainModel(object):
                                            self.X,
                                            self.y,
                                            cv=cv,
-                                           scoring='roc_auc',
+                                           scoring='accuracy',
                                            n_jobs=-1)
         mean_auc = np.mean(fold_performance)
-        logging.info('Production Model AUC: {}.'.format(mean_auc))
+        logging.info('Production Model Accuracy: {}.'.format(mean_auc))
 
         # if performance is adequate, reset est object and fit on full data
-        if mean_auc >= 0.8:
+        if mean_auc >= 0.9:
             self.estimator.fit(self.X, self.y)
             return self.estimator
         else:
-            raise LowScoreException("AUC is looking low! Time for some thorough evaluation!")
+            raise LowScoreException("Accuracy is looking low! Time for some thorough evaluation!")
 
 
 class LowScoreException(Exception):
