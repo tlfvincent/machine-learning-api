@@ -3,6 +3,7 @@ from hyperopt import fmin, tpe, hp, Trials
 
 # validation metrics
 from sklearn.metrics import roc_curve, auc
+from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 
 # sklearn models
@@ -70,10 +71,13 @@ class ModelSearch(object):
             return 0
 
         model = clf.fit(X_train, y_train)
-        yhat_test = model.predict_proba(X_test)[:, 1]
-        fpr, tpr, _ = roc_curve(y_test, yhat_test)
-        roc_auc = auc(fpr, tpr)
-        return roc_auc
+        #yhat_test = model.predict_proba(X_test)[:, 1]
+        yhat_test = model.predict(X_test)
+        acc = accuracy_score(y_test, yhat_test)
+        print(acc)
+        #fpr, tpr, _ = roc_curve(y_test, yhat_test)
+        #roc_auc = auc(fpr, tpr)
+        return 1-acc
 
 
 def main():
@@ -83,9 +87,6 @@ def main():
     X = dat[[x for x in dat.columns if x != 'class']]
 
     y = dat['class']
-    #le = LabelEncoder()
-    #le.fit(yraw)
-    #y = le.transform(yraw)
 
     search = ModelSearch(X, y)
 
@@ -95,14 +96,10 @@ def main():
     best = fmin(objective,
                 model_space,
                 algo=tpe.suggest,
-                max_evals=1000,
+                max_evals=100,
                 trials=trials)
 
     print(best)
-
-    # clf = RandomForestClassifier(max_depth=2, random_state=0)
-    # clf.fit(X, yraw)
-    # print(clf.feature_importances_)
 
 if __name__ == '__main__':
     main()
