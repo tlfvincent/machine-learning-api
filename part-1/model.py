@@ -16,6 +16,7 @@ def main(params):
     dat = pd.read_csv('./data/iris_data.csv')
 
     X = dat[[x for x in dat.columns if x != 'class']]
+    features = X.columns
 
     y = dat['class']
 
@@ -31,6 +32,7 @@ def main(params):
         production_model = tm.train_model()
         with open('./models/model.pickle', 'wb') as handle:
             pickle.dump(production_model, handle)
+            pickle.dump(features, handle)
 
 if __name__ == '__main__':
 
