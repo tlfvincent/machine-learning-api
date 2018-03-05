@@ -1,0 +1,14 @@
+api:
+  restart: always
+  build: ./api
+  expose:
+    - "5000"
+
+loadbalancer:
+  image: 'dockercloud/haproxy:latest'
+  links:
+    - api
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+  ports:
+    - 80:80
