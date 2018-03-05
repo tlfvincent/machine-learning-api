@@ -61,4 +61,4 @@ def get_predictions():
 
 
 if __name__ == "__main__":
-    iris_service.run(host='0.0.0.0', port=5010, debug=True)
+    iris_service.run(host='0.0.0.0', port=5000, debug=True)
