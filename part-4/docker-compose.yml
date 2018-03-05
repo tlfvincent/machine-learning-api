@@ -1,0 +1,38 @@
+version: "2"
+
+services:
+  api:
+    restart: always
+    build: ./api
+    links:
+      - db
+    ports:
+      - 5000
+    environment:
+      - SERVICE_PORTS=5000
+
+  loadbalancer:
+    image: 'dockercloud/haproxy:latest'
+    links:
+      - api
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - BALANCE=leastconn
+    ports:
+      - 80:80
+
+  data:
+    restart: always
+    image: 'postgres:9.6.5'
+    volumes:
+      - /var/lib/postgresql
+    command: true
+
+  db:
+    restart: always
+    image: 'postgres:9.6.5'
+    volumes_from:
+      - data
+    ports:
+      - 5432:5432

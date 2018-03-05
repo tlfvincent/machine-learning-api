@@ -15,3 +15,7 @@ A part-by-part series on how to build a highly-available and monitored ML API
 - http://www.8bitavenue.com/2017/11/machine-learning-api-using-scikit-learn-flask-and-docker/
 - https://www.vioan.eu/blog/2016/06/24/scale-your-python-app-with-docker-and-haproxy/
 - http://www.patricksoftwareblog.com/using-docker-for-flask-application-development-not-just-production/
+- https://blog.codeship.com/monitoring-your-synchronous-python-web-applications-using-prometheus/
+- https://github.com/amitsaha/python-prometheus-demo
+- http://www.ameyalokare.com/docker/2017/09/20/nginx-flask-postgres-docker-compose.html
+- http://containertutorials.com/docker-compose/nginx-flask-postgresql.html
