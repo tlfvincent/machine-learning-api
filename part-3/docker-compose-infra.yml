@@ -1,11 +1,17 @@
-
-version: "2"
+# Based off https://github.com/vegasbrianc/prometheus
+version: '2'
 
 volumes:
     prometheus_data: {}
     grafana_data: {}
 
 services:
+  stastd:
+    image: prom/statsd-exporter
+    container_name: statsd
+    expose:
+      - 9125
+      - 9102
   prometheus:
     image: prom/prometheus
     container_name: prometheus

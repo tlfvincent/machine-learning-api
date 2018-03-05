@@ -22,7 +22,7 @@ scrape_configs:
     # scheme defaults to 'http'.
 
     static_configs:
-         - targets: ['localhost:9090']
+         - targets: ['159.203.105.158:9090']
   - job_name: 'api'
 
     # Override the global default and scrape targets from this job every 5 seconds.
@@ -31,4 +31,4 @@ scrape_configs:
     # metrics_path defaults to '/metrics'
     # scheme defaults to 'http'.
     static_configs:
-        - targets: ['api:5000']
+        - targets: ['statsd:9102']

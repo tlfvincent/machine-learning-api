@@ -1,14 +1,11 @@
 import time
-import sys
 from flask import request
-from prometheus_client import Counter, Histogram
+from datadog import DogStatsd
+#from prometheus_client import Counter, Histogram
 
-REQUEST_COUNT = Counter(
-    'request_count', 'App Request Count',
-    ['app_name', 'method', 'endpoint', 'http_status'])
-REQUEST_LATENCY = Histogram('request_latency_seconds',
-                            'Request latency',
-                            ['app_name', 'endpoint'])
+statsd = DogStatsd(host="statsd", port=9125)
+REQUEST_LATENCY_METRIC_NAME = 'request_latency_seconds'
+REQUEST_COUNT_METRIC_NAME = 'request_count'
 
 
 def start_timer():
@@ -17,16 +14,25 @@ def start_timer():
 
 def stop_timer(response):
     resp_time = time.time() - request.start_time
-    #sys.stderr.write("Response time: {0}s\n".format(resp_time))
-    REQUEST_LATENCY.labels('api', request.path).observe(resp_time)
+    statsd.histogram(REQUEST_LATENCY_METRIC_NAME,
+            resp_time,
+            tags=[
+                'service:webapp',
+                'endpoint: {0}'.format(request.path),
+                ]
+    )
     return response
 
 
 def record_request_data(response):
-    #sys.stderr.write("Request path: {0} Request method: {1} Response status: {2}\n".format(
-    #                request.path, request.method, response.status_code))
-    REQUEST_COUNT.labels('api', request.method, request.path,
-                         response.status_code).inc()
+    statsd.increment(REQUEST_COUNT_METRIC_NAME,
+            tags=[
+                'service: webapp',
+                'method: {0}'.format(request.method),
+                'endpoint: {0}'.format(request.path),
+                'status: {0}'.format(response.status_code)
+                ]
+    )
     return response
 
 
