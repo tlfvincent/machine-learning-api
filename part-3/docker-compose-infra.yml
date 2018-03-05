@@ -13,14 +13,14 @@ services:
       - 9125
       - 9102
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus:v2.2.0-rc.1
     container_name: prometheus
     volumes:
       - ./config/prometheus/:/etc/prometheus/
       - prometheus_data:/prometheus
     command:
-      - '-config.file=/etc/prometheus/prometheus.yml'
-      - '-storage.local.path=/prometheus'
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
     expose:
       - 9090
     ports:
