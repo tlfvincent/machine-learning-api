@@ -1,7 +1,6 @@
 import time
 from flask import request
 from datadog import DogStatsd
-#from prometheus_client import Counter, Histogram
 
 statsd = DogStatsd(host="statsd", port=9125)
 REQUEST_LATENCY_METRIC_NAME = 'request_latency_seconds'
