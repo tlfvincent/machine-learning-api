@@ -5,7 +5,9 @@ A part-by-part series on how to build a highly-available and monitored ML API
 
 ## Part 2 - Scaling your Flask Machine Learning API with Docker and HAProxy
 
-## Part 3 - Monitoring your  Machine Learning API with 
+## Part 3 - Monitoring your Machine Learning API with Prometheus and Grafana
+
+## Part 4 - Logging Calls to your Machine Learning API with PostGres
 
 ## Links
 - http://www.patricksoftwareblog.com/using-docker-for-flask-application-development-not-just-production/
