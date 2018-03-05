@@ -1,18 +1,21 @@
-api:
-  restart: always
-  build: ./api
-  ports:
-    - 5000
-  environment:
-    - SERVICE_PORTS=5000
+version: "2"
 
-loadbalancer:
-  image: 'dockercloud/haproxy:latest'
-  depends_on:
-    - api
-  volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
-  environment:
-    - BALANCE=leastconn
-  ports:
-    - 80:80
+services:
+  api:
+    restart: always
+    build: ./api
+    ports:
+      - 5000
+    environment:
+      - SERVICE_PORTS=5000
+
+  loadbalancer:
+    image: 'dockercloud/haproxy:latest'
+    links:
+      - api
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - BALANCE=leastconn
+    ports:
+      - 80:80

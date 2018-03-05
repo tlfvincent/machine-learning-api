@@ -1,3 +1,6 @@
+
+version: "2"
+
 volumes:
     prometheus_data: {}
     grafana_data: {}
