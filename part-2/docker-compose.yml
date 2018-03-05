@@ -1,14 +1,18 @@
 api:
   restart: always
   build: ./api
-  expose:
-    - "5000"
+  ports:
+    - 5000
+  environment:
+    - SERVICE_PORTS=5000
 
 loadbalancer:
   image: 'dockercloud/haproxy:latest'
-  links:
+  depends_on:
     - api
   volumes:
     - /var/run/docker.sock:/var/run/docker.sock
+  environment:
+    - BALANCE=leastconn
   ports:
     - 80:80
