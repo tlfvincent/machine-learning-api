@@ -3,7 +3,7 @@ import pickle
 import traceback
 import pandas as pd
 from flask import Flask, request, jsonify
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from config import BaseConfig
 from helpers.middleware import setup_metrics
 
@@ -25,6 +25,9 @@ class IrisService(Flask):
 
 iris_service = IrisService(__name__)
 setup_metrics(iris_service)
+db = SQLAlchemy(iris_service)
+
+
 
 
 @iris_service.route("/")
