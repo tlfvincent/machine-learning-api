@@ -25,6 +25,7 @@ class IrisService(Flask):
 
 iris_service = IrisService(__name__)
 setup_metrics(iris_service)
+iris_service.config.from_object(BaseConfig)
 db = SQLAlchemy(iris_service)
 
 from schemas import Classifications
