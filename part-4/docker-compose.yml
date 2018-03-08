@@ -8,6 +8,8 @@ services:
       - db
     ports:
       - 5000
+    env_file:
+      - .env
     environment:
       - SERVICE_PORTS=5000
 
