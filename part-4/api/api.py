@@ -27,7 +27,7 @@ iris_service = IrisService(__name__)
 setup_metrics(iris_service)
 db = SQLAlchemy(iris_service)
 
-
+from schemas import Classifications
 
 
 @iris_service.route("/")

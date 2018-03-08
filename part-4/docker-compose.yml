@@ -27,7 +27,7 @@ services:
     image: 'postgres:9.6.5'
     volumes:
       - /var/lib/postgresql
-    command: true
+    command: ['true']
 
   db:
     restart: always
