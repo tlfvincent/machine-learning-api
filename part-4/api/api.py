@@ -28,7 +28,7 @@ setup_metrics(iris_service)
 iris_service.config.from_object(BaseConfig)
 db = SQLAlchemy(iris_service)
 
-from schemas import Classifications
+#from schemas import *
 
 
 @iris_service.route("/")
