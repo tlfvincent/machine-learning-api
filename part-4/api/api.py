@@ -28,7 +28,7 @@ setup_metrics(iris_service)
 iris_service.config.from_object(BaseConfig)
 db = SQLAlchemy(iris_service)
 
-#from schemas import *
+from schemas import *
 
 
 @iris_service.route("/")
@@ -61,9 +61,16 @@ def get_predictions():
                        'Iris-versicolor': probas_[0][1],
                        'Iris-virginica': probas_[0][2]}
 
+        row = Classifications(json_, predictions, 'success')
+        db.session.add(row)
+        db.session.commit()
+
         response = jsonify({'prediction': predictions, "status_code": 200})
         return response
     except Exception as e:
+        row = Classifications(json_, str(e), 'error')
+        db.session.add(row)
+        db.session.commit()
         return jsonify({'error': str(e), 'trace': traceback.format_exc()})
 
 
