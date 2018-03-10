@@ -27,7 +27,16 @@ class IrisService(Flask):
 
 iris_service = IrisService(__name__)
 setup_metrics(iris_service)
-iris_service.config.from_object(BaseConfig)
+#iris_service.config.from_object(BaseConfig)
+iris_service.config['SQLALCHEMY_DATABASE_URI'] = \
+    'postgresql+psycopg2://{user}:{passwd}@{host}:{port}/{db}'.format(
+        user='postgres',
+        passwd='postgres',
+        host='postgres',
+        port=5432,
+        db='postgres')
+iris_service.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+iris_service.secret_key = 'foobarbaz'
 db = SQLAlchemy(iris_service)
 
 
