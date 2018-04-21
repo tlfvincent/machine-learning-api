@@ -12,8 +12,8 @@ class Classifications(db.Model):
     status_code = db.Column(db.String, nullable=True)
     created_at = db.Column(db.DateTime, nullable=True)
 
-    def __init__(self, payload, response, status_code):
+    def __init__(self, payload, response, status_code, datestamp):
         self.payload = payload
         self.response = response
         self.status_code = status_code
-        self.created_at = datetime.datetime.now()
+        self.created_at = datestamp

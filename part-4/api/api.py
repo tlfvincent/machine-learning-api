@@ -27,14 +27,14 @@ class IrisService(Flask):
 
 iris_service = IrisService(__name__)
 setup_metrics(iris_service)
-#iris_service.config.from_object(BaseConfig)
-iris_service.config['SQLALCHEMY_DATABASE_URI'] = \
-    'postgresql+psycopg2://{user}:{passwd}@{host}:{port}/{db}'.format(
-        user='postgres',
-        passwd='postgres',
-        host='postgres',
-        port=5432,
-        db='postgres')
+iris_service.config.from_object(BaseConfig)
+# iris_service.config['SQLALCHEMY_DATABASE_URI'] = \
+#     'postgresql+psycopg2://{user}:{passwd}@{host}:{port}/{db}'.format(
+#         user='postgres',
+#         passwd='postgres',
+#         host='postgres',
+#         port=5432,
+#         db='postgres')
 iris_service.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 iris_service.secret_key = 'foobarbaz'
 db = SQLAlchemy(iris_service)
@@ -50,11 +50,11 @@ class Classifications(db.Model):
     status_code = db.Column(db.String, nullable=True)
     created_at = db.Column(db.DateTime, nullable=True)
 
-    def __init__(self, payload, response, status_code):
+    def __init__(self, payload, response, status_code, datestamp):
         self.payload = payload
         self.response = response
         self.status_code = status_code
-        self.created_at = datetime.datetime.now()
+        self.created_at = datestamp
 
 
 def database_initialization_sequence():
@@ -101,14 +101,14 @@ def get_predictions():
                        'Iris-versicolor': probas_[0][1],
                        'Iris-virginica': probas_[0][2]}
 
-        row = Classifications(json_, predictions, 'success')
+        row = Classifications(json_, predictions, 'success', datetime.datetime.now())
         db.session.add(row)
         db.session.commit()
 
         response = jsonify({'prediction': predictions, "status_code": 200})
         return response
     except Exception as e:
-        row = Classifications(json_, str(e), 'error')
+        row = Classifications(json_, str(e), 'error', datetime.datetime.now())
         db.session.add(row)
         db.session.commit()
         return jsonify({'error': str(e), 'trace': traceback.format_exc()})
