@@ -62,7 +62,8 @@ def database_initialization_sequence():
     test_rec = Classifications(
                '{"sepal_length": 1, "sepal_width":0.2, "petal_length":3, "petal_width":2}',
                '{"Iris-setosa": 0.5, "Iris-versicolor":0.25, "Iris-virginica":0.34}',
-               'success')
+               'success',
+               datetime.datetime.now())
 
     db.session.add(test_rec)
     db.session.rollback()
