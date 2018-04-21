@@ -13,11 +13,11 @@ services:
       - 9125
       - 9102
   prometheus:
-    image: prom/prometheus:v2.2.0-rc.1
+    image: prom/prometheus:v2.2.0
     container_name: prometheus
     volumes:
       - ./config/prometheus/:/etc/prometheus/
-      - prometheus_data:/prometheus
+      #- prometheus_data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -31,8 +31,8 @@ services:
       - prometheus
     ports:
       - 3000:3000
-    volumes:
-      - grafana_data:/var/lib/grafana
+    #volumes:
+      #- grafana_data:/var/lib/grafana
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=foobar
       - GF_USERS_ALLOW_SIGN_UP=false
